@@ -1,33 +1,62 @@
-// Includes
-#include "colors.inc"
+#include"colors.inc"
 
+#declare Europe = Blue;
+#declare Asie = Yellow;
+#declare Afrique = Black;
+#declare Oceanie = Green;
+#declare Amerique = Red;
 
-// Constants
-#macro anneau(couleur, trans, rot)
-    disc{ <0,0,0>, <0,1,0>, 10.0, 8.4
-        texture{
-            pigment{ couleur }
-            normal { bumps 0 scale 0.025}
-            finish { phong 1}
-        } 
-        scale <1,1,1>
-        rotate rot
-        translate trans
-    }
+#declare camera_face =camera{location<0,0,-6>look_at<0,0,0>
+//orthographic
+}
+
+#declare camera_profil_droit = camera
+{
+location<5,0,0>
+look_at<0,0,0>
+//orthographic
+}
+
+#declare camera_profil_gauche = camera
+{
+location<-5,0,0>
+look_at<0,0,0>
+//orthographic
+}
+
+#declare camera_dessus = camera
+{
+location<0,6,0>
+look_at<0,0,0>
+//orthographic
+}
+
+camera{ camera_face }
+
+background{color White}
+
+light_source{<-200.0,0.0,0.0>color White }
+light_source{<200.0,0.0,0.0>color White }
+light_source{<0.0,0.0,-200.0>color White }
+light_source{<0.0,200.0,0.0>color White }
+
+#declare largeur_anneau  =1;
+#declare rayon_anneau  =0.075;
+#declare ecart_anneau  =0.2;
+
+#macro anneau (position, rotation, continent )
+  object{
+    torus{ largeur_anneau, rayon_anneau }
+    pigment{color continent }
+    rotate rotation
+    translate position
+  }
 #end
 
-anneau(Black, <0,0,0>, <0,0,0>)
-
-anneau(Green, <10,0,-11>, <0,0,0>)
-
-anneau(Red, <0,0,-21>, <0,0,0>)
-
-anneau(Yellow, <10,0,11>, <0,0,0>)
-
-anneau(Blue, <0,0,21>, <0,0,0>)
-
-
-background { White }
-light_source{<10,10,-10>,1}
-camera{location <10,110,0> look_at <0,0,0>}
-
+union{
+anneau (<-largeur_anneau-ecart_anneau,-largeur_anneau/2,0>,<90,-10,0>, Asie )
+anneau (<largeur_anneau+ecart_anneau,-largeur_anneau/2,0>,<90,-10,0>, Oceanie )
+anneau (<0,largeur_anneau/2,0>,<90,10,0>, Afrique )
+anneau (<-2*largeur_anneau-2*ecart_anneau,largeur_anneau/2,0>,<90,10,0>, Europe )
+anneau (<2*largeur_anneau+2*ecart_anneau,largeur_anneau/2,0>,<90,10,0>, Amerique )
+}
